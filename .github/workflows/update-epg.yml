@@ -1,0 +1,37 @@
+name: Update EPG
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs at the top of every hour
+  workflow_dispatch: # Allows manual trigger from the GitHub UI
+
+jobs:
+  update-epg:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run EPG Scraper
+        run: python scraper.py
+
+      - name: Commit and Push JSON
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add live_epg.json
+          # Check if there are any changes to commit to avoid failing
+          if git diff --staged --quiet; then
+            echo "No new EPG updates to commit."
+          else
+            git commit -m "Auto-update live EPG data [skip ci]"
+            git push
+          fi
