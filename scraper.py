@@ -5,7 +5,7 @@ import json
 import datetime
 import os
 
-EPG_URL = "https://raw.githubusercontent.com/mitthu786/tvepg/main/epg.xml.gz"
+EPG_URL = "https://raw.githubusercontent.com/mitthu786/tvepg/main/tataplay/epg.xml.gz"
 OUTPUT_FILE = "live_epg.json"
 
 print(f"Downloading EPG from {EPG_URL}...")
